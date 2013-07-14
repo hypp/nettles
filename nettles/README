@@ -15,6 +15,9 @@ See the examples dir
 
 Compiling
 ========================
+Currently builds on:
+* macosx
+
 Nettles is built using SCons
 http://www.scons.org/
 
@@ -30,5 +33,3 @@ but if it fails you will have to manually build them.
 Anyway, start a terminal:
 cd /to/the/nettles/dir
 scons
-
-
