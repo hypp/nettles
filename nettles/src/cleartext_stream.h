@@ -19,6 +19,7 @@
 
 #include "stream.h"
 
+// Function to create a cleartext stream
 stream_handle_t stream_new_cleartext();
 
 #endif /* CLEARTEXT_STREAM_H_ */

@@ -41,8 +41,8 @@
 #include "cleartext_stream.h"
 #include "ssl_stream.h"
 
+// The default config file name
 #define DEFAULT_CONFIG_FILE_NAME "nettles.lua"
-
 
 
 #ifdef HAVE_STRICMP
@@ -75,6 +75,7 @@ struct {
 		{"remove_listener", l_remove_listener},
 		{NULL, NULL}
 };
+
 
 struct general_data {
 	struct event_base *base;
@@ -113,6 +114,7 @@ static void stackDump (lua_State *L) {
     }
 #endif
 
+// Called by libevent when there is data to read
 static void input_readcb(struct bufferevent *bev, void *user_data)
 {
 	stream_handle_t stream = user_data;
@@ -163,8 +165,8 @@ static void input_readcb(struct bufferevent *bev, void *user_data)
 	evbuffer_free(buffer);
 }
 
-static void
-input_writecb(struct bufferevent *bev, void *user_data)
+// Called by libevent when data has been sent
+static void input_writecb(struct bufferevent *bev, void *user_data)
 {
 	stream_handle_t stream = user_data;
 
@@ -182,8 +184,8 @@ input_writecb(struct bufferevent *bev, void *user_data)
 	}
 }
 
-static void
-input_eventcb(struct bufferevent *bev, short events, void *user_data)
+// Called by libevent on various other events
+static void input_eventcb(struct bufferevent *bev, short events, void *user_data)
 {
 	stream_handle_t stream = user_data;
 
@@ -219,6 +221,7 @@ input_eventcb(struct bufferevent *bev, short events, void *user_data)
 	}
 }
 
+// Called by ssl_stream on successful authentication
 static void authentication_cb(stream_handle_t stream, void* data)
 {
 	stream_handle_t other = stream_get_other(stream);
@@ -227,7 +230,7 @@ static void authentication_cb(stream_handle_t stream, void* data)
 	bufferevent_enable(bev, EV_WRITE | EV_READ);
 }
 
-
+// Create a stream
 stream_handle_t create_stream(struct listener *data, int server)
 {
 	stream_handle_t stream = NULL;
@@ -347,8 +350,8 @@ stream_handle_t create_stream(struct listener *data, int server)
     return stream;
 }
 
-static void
-listener_cb(struct evconnlistener *listener, evutil_socket_t fd,
+// Called by libevent when a client connects
+static void listener_cb(struct evconnlistener *listener, evutil_socket_t fd,
     struct sockaddr *sa, int socklen, void *user_data)
 {
 	struct listener *data = user_data;
@@ -463,6 +466,7 @@ error:
 	return;
 }
 
+// Add a new listener
 void add_listener(const char* ip, int port, struct listener* listener)
 {
 	struct sockaddr_in sin;
@@ -490,6 +494,7 @@ void add_listener(const char* ip, int port, struct listener* listener)
 	return;
 }
 
+// Callback from lua for adding a listener
 int l_add_listener (lua_State *L)
 {
 	if (!lua_istable(L, 1))
@@ -537,6 +542,7 @@ int l_add_listener (lua_State *L)
 	return 1;  /* number of results */
 }
 
+// Callback from lua for removing a listener
 int l_remove_listener (lua_State *L)
 {
 	if (!lua_islightuserdata(L, 1))

@@ -19,6 +19,9 @@
 
 #include "stream.h"
 
+// These are the internal functions of the stream interface which should be implemented
+// by the actual streams
+
 typedef error_type_t (*stream_read_func_t)(stream_handle_t stream, struct evbuffer* buffer);
 typedef error_type_t (*stream_write_func_t)(stream_handle_t stream, struct evbuffer* buffer);
 typedef void (*stream_connected_func_t)(stream_handle_t stream);

@@ -11,7 +11,7 @@ The server application does not support TLS.
 - client and server
 Neither the client nor the server application supports TLS.
 
-See the examples dir
+See the examples dir.
 
 Compiling
 ========================
@@ -27,9 +27,20 @@ http://www.scons.org/wiki/FrequentlyAskedQuestions#What_version_of_Python_do_I_n
 There are 3 third party libs (included)
 libevent, lua and Polarssl
 
-When compiling Nettles SCons will try to build the dependecies,
+When compiling Nettles, SCons will try to build the dependecies,
 but if it fails you will have to manually build them.
 
 Anyway, start a terminal:
 cd /to/the/nettles/dir
 scons
+
+Running
+========================
+Just run
+./nettles client-nettles.lua
+
+Configuration
+========================
+There is not very much to configure.
+See the examples dir.
+

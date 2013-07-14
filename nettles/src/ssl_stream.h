@@ -19,9 +19,11 @@
 
 #include "stream.h"
 
-typedef void (*stream_authentication_callback_t)(stream_handle_t stream, void* data);
+#include <polarssl/ssl.h>
+#include <polarssl/entropy.h>
+#include <polarssl/ctr_drbg.h>
 
-#define HANDSHAKE_DONE 1
+typedef void (*stream_authentication_callback_t)(stream_handle_t stream, void* data);
 
 struct cipher_context {
     entropy_context entropy;
@@ -38,11 +40,15 @@ struct cipher_context {
     void* authentication_cb_data;
 };
 
+// Function to create a new ssl stream client
 stream_handle_t stream_new_ssl_client();
+// Function to create a new ssl stream server
 stream_handle_t stream_new_ssl_server();
 
+// Get the cipher_context currently in use
 struct cipher_context* stream_get_cipher_context(stream_handle_t stream);
 
+// Set a callback function which will be called on successful authentication
 void stream_set_authentication_callback(stream_handle_t stream, stream_authentication_callback_t callback, void* data);
 
 #endif /* SSL_STREAM_H_ */

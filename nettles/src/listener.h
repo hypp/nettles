@@ -28,8 +28,10 @@ struct listener {
 	lua_State *L;
 };
 
+// Function to create a new listener
 struct listener* listener_new();
 
+// Function to free a listener
 void listener_free(struct listener* listener);
 
 #endif /* LISTENER_H_ */
