@@ -9,6 +9,13 @@ deps = 'deps'
 
 env = Environment()
 
+# Check for platform differences
+conf = env.Configure(config_h='src/config.h')
+conf.CheckFunc('_stricmp')
+conf.CheckFunc('stricmp')
+conf.CheckFunc('strcasecmp')
+conf.Finish()
+
 # Check for debug build
 debug = ARGUMENTS.get('debug', 0)
 if int(debug):
@@ -79,16 +86,9 @@ else:
   env.Command(lua_lib, Dir(lua_lib_path), ['make clean'], chdir=lua_path)
   env.Depends(target, lua_lib)
 
+# Add includes and libs
 env.Append(CPPPATH=[libevent_include_path, lua_include_path, polarssl_include_path])
 env.Append(LIBPATH=[libevent_lib_path, lua_lib_path, polarssl_lib_path])
 env.Append(LIBS=[libevent_lib, lua_lib, polarssl_lib])
 
-# Check for platform differences
-conf = env.Configure(config_h='src/config.h')
-conf.CheckFunc('_stricmp')
-conf.CheckFunc('stricmp')
-conf.CheckFunc('strcasecmp')
-conf.Finish()
-
 env.Program(target, sources)
-
