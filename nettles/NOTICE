@@ -3,6 +3,8 @@ Nettles
 Named after the british actor John Nettles,
 and also the words NETwork and Transport LayEr Security
 
-Polarssl is used with the FOSS license exception
-https://polarssl.org/foss-license-exception
+Note that the 3 party libs use different licenses:
+PolarSSL FOSS license exception https://polarssl.org/foss-license-exception
+libevent 3 clause BSD-license http://libevent.org/LICENSE.txt
+lua MIT license http://www.lua.org/license.html
 
