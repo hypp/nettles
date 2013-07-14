@@ -1,0 +1,94 @@
+
+# Import other required libs
+import tarfile
+
+# What we should build
+sources = ['src/cleartext_stream.c', 'src/listener.c', 'src/ssl_stream.c', 'src/stream.c', 'src/nettles.c']
+target = 'nettles'
+deps = 'deps'
+
+env = Environment()
+
+# Check for debug build
+debug = ARGUMENTS.get('debug', 0)
+if int(debug):
+  env.Append(CCFLAGS = '-g')
+
+# Simple function to untar dependencies
+def untar(target, source, env):
+    tar = tarfile.open(str(source[0]))
+    # Hardcoded path instead of target[0]
+    tar.extractall(str(deps))
+    tar.close()
+
+# libevent
+libevent_tgz = deps + '/libevent-2.0.21-stable.tar.gz'
+libevent_path = deps + '/libevent-2.0.21-stable'
+libevent_include_path = libevent_path + '/include'
+libevent_lib_path = libevent_path + '/.libs'
+libevent_lib = ['event_core', 'event_extra']
+
+if not env.GetOption('clean'):
+  env.Command(Dir(libevent_path),libevent_tgz,untar)
+  libevent_env = Environment(LIBPATH=libevent_lib_path);
+  libevent_conf = Configure(libevent_env)
+  if not libevent_conf.CheckLib(libevent_lib):
+    print 'Could not find: ', libevent_lib
+    env.Command(libevent_lib, Dir(libevent_lib_path), ['./configure --disable-shared --disable-openssl','make'], chdir=libevent_path)
+    env.Depends(target, libevent_lib)
+  libevent_env = libevent_conf.Finish();
+else:
+  env.Command(libevent_lib, Dir(libevent_lib_path), ['make clean'], chdir=libevent_path)
+
+# polarssl
+polarssl_tgz = deps + '/polarssl-1.2.8-gpl.tgz' 
+polarssl_path = deps + '/polarssl-1.2.8'
+polarssl_include_path = polarssl_path + '/include'
+polarssl_lib_path = polarssl_path + '/library'
+polarssl_lib = ['polarssl']
+
+if not env.GetOption('clean'):
+  env.Command(Dir(polarssl_path),polarssl_tgz,untar)
+  polarssl_env = Environment(LIBPATH=polarssl_lib_path);
+  polarssl_conf = Configure(polarssl_env)
+  if not polarssl_conf.CheckLib(polarssl_lib):
+    print 'Could not find: ', polarssl_lib
+    env.Command(polarssl_lib, Dir(polarssl_lib_path), ['make no_test'], chdir=polarssl_path)
+    env.Depends(target, polarssl_lib)
+  polarssl_env = polarssl_conf.Finish()
+else:
+  env.Command(polarssl_lib, polarssl_lib_path, ['make clean'], chdir=polarssl_path)
+
+# lua
+lua_tgz = deps + '/lua-5.2.2.tar.gz'
+lua_path = deps + '/lua-5.2.2'
+lua_include_path = lua_path + '/src'
+lua_lib_path = lua_path + '/src'
+lua_lib = ['lua']
+
+if not env.GetOption('clean'):
+  env.Command(Dir(lua_path),lua_tgz,untar)
+  lua_env = Environment(LIBPATH=lua_lib_path);
+  lua_conf = Configure(lua_env)
+  if not lua_conf.CheckLib(lua_lib):
+    print 'Could not find: ', lua_lib
+    env.Command(lua_lib, Dir(lua_lib_path), ['make macosx'], chdir=lua_path)
+    env.Depends(target, lua_lib)
+  lua_env = lua_conf.Finish()
+else:
+  env.Command(lua_lib, Dir(lua_lib_path), ['make clean'], chdir=lua_path)
+  env.Depends(target, lua_lib)
+
+env.Append(CPPPATH=[libevent_include_path, lua_include_path, polarssl_include_path])
+env.Append(LIBPATH=[libevent_lib_path, lua_lib_path, polarssl_lib_path])
+env.Append(LIBS=[libevent_lib, lua_lib, polarssl_lib])
+
+# Check for platform differences
+conf = env.Configure(config_h='src/config.h')
+conf.CheckFunc('_stricmp')
+conf.CheckFunc('stricmp')
+conf.CheckFunc('strcasecmp')
+conf.Finish()
+
+env.Program(target, sources)
+

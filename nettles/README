@@ -1,0 +1,34 @@
+About
+========================
+Nettles is a program that adds TLS support to
+legacy applications without modification.
+
+It can work in three different modes:
+- client only
+The client application does not support TLS.
+- server only
+The server application does not support TLS.
+- client and server
+Neither the client nor the server application supports TLS.
+
+See the examples dir
+
+Compiling
+========================
+Nettles is built using SCons
+http://www.scons.org/
+
+SCons requires Python
+http://www.scons.org/wiki/FrequentlyAskedQuestions#What_version_of_Python_do_I_need.3F
+
+There are 3 third party libs (included)
+libevent, lua and Polarssl
+
+When compiling Nettles SCons will try to build the dependecies,
+but if it fails you will have to manually build them.
+
+Anyway, start a terminal:
+cd /to/the/nettles/dir
+scons
+
+
