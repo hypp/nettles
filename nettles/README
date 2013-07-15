@@ -13,11 +13,12 @@ Neither the client nor the server application supports TLS.
 
 See the examples dir.
 
-Compiling
+Building
 ========================
 Currently builds on:
 * OS X
 * Windows
+* Red Hat Enterprise Linux 6.4 64-bit
 
 Nettles is built using SCons
 http://www.scons.org/
@@ -28,11 +29,14 @@ http://www.scons.org/wiki/FrequentlyAskedQuestions#What_version_of_Python_do_I_n
 On Windows both MSYS and MinGW is required
 http://www.mingw.org/
 
-There are 3 third party libs (included)
-libevent, lua and Polarssl
+On Linux readline-devel is required
+On RHEL 6.4: sudo yum install readline-devel
 
 When compiling Nettles, SCons will try to build the dependecies,
 but if it fails you will have to manually build them.
+
+There are 3 third party libs (included)
+libevent, lua and Polarssl
 
 Building on OS X:
 Start a terminal
@@ -44,6 +48,10 @@ Start a command prompt
 cd /path/to/nettles
 /path/to/scons.bat path_to_msys=/path/to/msys/bin
 
+Building on Red Hat Enterprise Linux:
+Start a terminal
+cd /path/to/nettles
+/path/to/scons
 
 Running
 ========================

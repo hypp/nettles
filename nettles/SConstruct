@@ -23,15 +23,27 @@ if (platform.system() == 'Windows'):
   if (not path_to_msys):
     print 'No path_to_msys! Build will most likely fail.'
   env.PrependENVPath('PATH', path_to_msys)
-else:
+elif (platform.system() == 'Linux'):
+  platform_extra_libs = ['m', 'rt']
   tools = ['default']
   env = Environment(tools = tools)
+elif (platform.system() == 'Darwin'):
+  tools = ['default']
+  env = Environment(tools = tools)
+else:
+  print 'Platform not supported'
+  Exit(2)
 
 # Check for platform differences
 conf = env.Configure(config_h='src/config.h')
 conf.CheckFunc('_stricmp')
 conf.CheckFunc('stricmp')
 conf.CheckFunc('strcasecmp')
+for lib in platform_extra_libs:
+  if not conf.CheckLib(lib):
+    print 'Failed to find library:' + lib
+    print 'Please install it and restart scons'
+    Exit(7)
 conf.Finish()
 
 # Check for debug build
@@ -102,6 +114,8 @@ if not env.GetOption('clean'):
     print 'Could not find: ', lua_lib
     if (platform.system() == 'Windows'):
       env.Command(lua_lib, Dir(lua_lib_path), ['make mingw'], chdir=lua_path)
+    elif (platform.system() == 'Linux'):
+      env.Command(lua_lib, Dir(lua_lib_path), ['make linux'], chdir=lua_path)
     else:
       env.Command(lua_lib, Dir(lua_lib_path), ['make macosx'], chdir=lua_path)
     env.Depends(target, lua_lib)
@@ -115,3 +129,4 @@ env.Append(LIBPATH=[libevent_lib_path, lua_lib_path, polarssl_lib_path])
 env.Append(LIBS=[libevent_lib, lua_lib, polarssl_lib, platform_extra_libs])
 
 env.Program(target, sources)
+
