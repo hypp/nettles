@@ -1,13 +1,31 @@
 
 # Import other required libs
 import tarfile
+import platform
 
 # What we should build
 sources = ['src/cleartext_stream.c', 'src/listener.c', 'src/ssl_stream.c', 'src/stream.c', 'src/nettles.c']
 target = 'nettles'
 deps = 'deps'
+platform_extra_libs = []
 
-env = Environment()
+distclean = 'distclean'
+
+if (platform.system() == 'Windows'):
+# On Windows we must
+# use mingw 
+# have the path to sh, sed, awk et al
+# link with ws2_32
+  tools = ['mingw']
+  platform_extra_libs = ['ws2_32']
+  env = Environment(tools = tools)
+  path_to_msys = ARGUMENTS.get('path_to_msys') 
+  if (not path_to_msys):
+    print 'No path_to_msys! Build will most likely fail.'
+  env.PrependENVPath('PATH', path_to_msys)
+else:
+  tools = ['default']
+  env = Environment(tools = tools)
 
 # Check for platform differences
 conf = env.Configure(config_h='src/config.h')
@@ -37,15 +55,18 @@ libevent_lib = ['event_core', 'event_extra']
 
 if not env.GetOption('clean'):
   env.Command(Dir(libevent_path),libevent_tgz,untar)
-  libevent_env = Environment(LIBPATH=libevent_lib_path);
+  libevent_env = Environment(LIBPATH=libevent_lib_path, tools = tools);
   libevent_conf = Configure(libevent_env)
   if not libevent_conf.CheckLib(libevent_lib):
     print 'Could not find: ', libevent_lib
-    env.Command(libevent_lib, Dir(libevent_lib_path), ['./configure --disable-shared --disable-openssl','make'], chdir=libevent_path)
+    if (platform.system() == 'Windows'):
+      env.Command(libevent_lib, Dir(libevent_lib_path), ['sh ./configure --disable-shared --disable-openssl','make'], chdir=libevent_path)
+    else:
+      env.Command(libevent_lib, Dir(libevent_lib_path), ['./configure --disable-shared --disable-openssl','make'], chdir=libevent_path)
     env.Depends(target, libevent_lib)
   libevent_env = libevent_conf.Finish();
 else:
-  env.Command(libevent_lib, Dir(libevent_lib_path), ['make clean'], chdir=libevent_path)
+  env.Clean(distclean, Dir(libevent_path))
 
 # polarssl
 polarssl_tgz = deps + '/polarssl-1.2.8-gpl.tgz' 
@@ -56,15 +77,15 @@ polarssl_lib = ['polarssl']
 
 if not env.GetOption('clean'):
   env.Command(Dir(polarssl_path),polarssl_tgz,untar)
-  polarssl_env = Environment(LIBPATH=polarssl_lib_path);
+  polarssl_env = Environment(LIBPATH=polarssl_lib_path, tools = tools);
   polarssl_conf = Configure(polarssl_env)
   if not polarssl_conf.CheckLib(polarssl_lib):
     print 'Could not find: ', polarssl_lib
-    env.Command(polarssl_lib, Dir(polarssl_lib_path), ['make no_test'], chdir=polarssl_path)
+    env.Command(polarssl_lib, Dir(polarssl_lib_path), ['make lib'], chdir=polarssl_path)
     env.Depends(target, polarssl_lib)
   polarssl_env = polarssl_conf.Finish()
 else:
-  env.Command(polarssl_lib, polarssl_lib_path, ['make clean'], chdir=polarssl_path)
+  env.Clean(distclean, Dir(polarssl_path))
 
 # lua
 lua_tgz = deps + '/lua-5.2.2.tar.gz'
@@ -75,20 +96,22 @@ lua_lib = ['lua']
 
 if not env.GetOption('clean'):
   env.Command(Dir(lua_path),lua_tgz,untar)
-  lua_env = Environment(LIBPATH=lua_lib_path);
+  lua_env = Environment(LIBPATH=lua_lib_path, tools = tools);
   lua_conf = Configure(lua_env)
   if not lua_conf.CheckLib(lua_lib):
     print 'Could not find: ', lua_lib
-    env.Command(lua_lib, Dir(lua_lib_path), ['make macosx'], chdir=lua_path)
+    if (platform.system() == 'Windows'):
+      env.Command(lua_lib, Dir(lua_lib_path), ['make mingw'], chdir=lua_path)
+    else:
+      env.Command(lua_lib, Dir(lua_lib_path), ['make macosx'], chdir=lua_path)
     env.Depends(target, lua_lib)
   lua_env = lua_conf.Finish()
 else:
-  env.Command(lua_lib, Dir(lua_lib_path), ['make clean'], chdir=lua_path)
-  env.Depends(target, lua_lib)
+  env.Clean(distclean, Dir(lua_path))
 
 # Add includes and libs
 env.Append(CPPPATH=[libevent_include_path, lua_include_path, polarssl_include_path])
 env.Append(LIBPATH=[libevent_lib_path, lua_lib_path, polarssl_lib_path])
-env.Append(LIBS=[libevent_lib, lua_lib, polarssl_lib])
+env.Append(LIBS=[libevent_lib, lua_lib, polarssl_lib, platform_extra_libs])
 
 env.Program(target, sources)

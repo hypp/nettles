@@ -1,13 +1,10 @@
 TODO
 ==================
-Change name
-Add to git
-Add license
 Clean up source
 Add tests
 Add more comments
 Add more documentation
-Add more assert
+Add more asserts
 Build on more platforms
 Add installers/packages
 Change to non GPL or LGPL TLS lib (gnu-tls axtls?)
@@ -17,3 +14,6 @@ DONE
 Change to scons or cmake
 Update polarssl
 Update libevent
+Change name
+Add to git
+Add license

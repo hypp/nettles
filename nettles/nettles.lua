@@ -31,10 +31,6 @@ client = add_listener{
 	type = "cleartext",
 	
 	on_accept = on_accept_client,
-	on_data_from_client = "",
-	on_data_from_server = "",
-	on_authenticated = "",
-	on_disconnect = ""
 	}
 print ("Added listener ", client)
 
@@ -47,12 +43,7 @@ server = add_listener{
 	trusted_ca_file = "test-ca.crt",
 	certificate_file = "server1.crt",
 	key_file = "server1.key",
-	dh_file = "",
 	
 	on_accept = on_accept_server,
-	on_data_from_client = "",
-	on_data_from_server = "",
-	on_authenticated = "",
-	on_disconnect = ""
 	}
 print ("Added listener ", server)

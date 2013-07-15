@@ -16,7 +16,8 @@ See the examples dir.
 Compiling
 ========================
 Currently builds on:
-* macosx
+* OS X
+* Windows
 
 Nettles is built using SCons
 http://www.scons.org/
@@ -24,15 +25,25 @@ http://www.scons.org/
 SCons requires Python
 http://www.scons.org/wiki/FrequentlyAskedQuestions#What_version_of_Python_do_I_need.3F
 
+On Windows both MSYS and MinGW is required
+http://www.mingw.org/
+
 There are 3 third party libs (included)
 libevent, lua and Polarssl
 
 When compiling Nettles, SCons will try to build the dependecies,
 but if it fails you will have to manually build them.
 
-Anyway, start a terminal:
-cd /to/the/nettles/dir
-scons
+Building on OS X:
+Start a terminal
+cd /path/to/nettles
+/path/to/scons
+
+Building on Windows:
+Start a command prompt
+cd /path/to/nettles
+/path/to/scons.bat path_to_msys=/path/to/msys/bin
+
 
 Running
 ========================
