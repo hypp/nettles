@@ -18,7 +18,7 @@ Building
 Currently builds on:
 * OS X
 * Windows
-* Red Hat Enterprise Linux 6.4 64-bit
+* Red Hat Enterprise Linux 6.4 64-bit and 32-bit
 
 Nettles is built using SCons
 http://www.scons.org/
