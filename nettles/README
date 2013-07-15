@@ -17,9 +17,12 @@ Building
 ========================
 Currently builds on:
 * OS X
-* Windows
+* Windows 7 64-bit (32-bit binary)
 * Red Hat Enterprise Linux 6.4 64-bit and 32-bit
-* Ubuntu Server 13.04 64-bit
+* Ubuntu Server 13.04 64-bit and 32-bit
+
+Git is required to check out the source
+http://git-scm.com/
 
 Nettles is built using SCons
 http://www.scons.org/
@@ -33,27 +36,24 @@ http://www.mingw.org/
 On Linux gcc and make is required
 On Linux readline-devel is required
 On RHEL: sudo yum install readline-devel
-On Ubuntu: sudo apt-get install libreadline-dev
-
-When compiling Nettles, SCons will try to build the dependecies,
-but if it fails you will have to manually build them.
-
-There are 3 third party libs (included)
-libevent, lua and Polarssl
+On Ubuntu: sudo apt-get install gcc git scons make libreadline-dev
 
 Building on OS X:
 Start a terminal
-cd /path/to/nettles
+git clone https://code.google.com/p/nettles/
+cd nettles/nettles
 /path/to/scons
 
 Building on Windows:
 Start a command prompt
-cd /path/to/nettles
+git clone https://code.google.com/p/nettles/
+cd nettles/nettles
 /path/to/scons.bat path_to_msys=/path/to/msys/bin
 
 Building on Red Hat Enterprise Linux or Ubuntu:
 Start a terminal
-cd /path/to/nettles
+git clone https://code.google.com/p/nettles/
+cd nettles/nettles
 /path/to/scons
 
 Running
