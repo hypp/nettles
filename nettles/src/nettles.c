@@ -577,6 +577,7 @@ int main(int argc, char* argv[])
 	if (data->base == NULL)
 	{
 		fprintf(stderr, "Could not initialize libevent!\n");
+		free(data);
 		return 1;
 	}
 
@@ -584,6 +585,7 @@ int main(int argc, char* argv[])
 	if (data->dns == NULL)
 	{
 		fprintf(stderr, "Could not initialize libevent dns!\n");
+		free(data);
 		return 1;
 	}
 
