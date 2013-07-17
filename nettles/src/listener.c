@@ -53,7 +53,6 @@ void listener_free(struct listener* listener)
 		// Clear it to catch use after free
 		memset(listener,0,sizeof(struct listener));
 		free(listener);
-		listener = NULL;
 	}
 }
 
