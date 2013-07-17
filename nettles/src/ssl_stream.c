@@ -202,11 +202,11 @@ error_type_t stream_write_ciphertext(stream_handle_t stream, struct evbuffer* bu
 			}
 			else if (ret == POLARSSL_ERR_NET_WANT_READ)
 			{
-				int x = 42;
+//				int x = 42;
 			}
 			else if (ret == POLARSSL_ERR_NET_WANT_WRITE)
 			{
-				int x = 42;
+//				int x = 42;
 			}
 			else
 			{
