@@ -261,12 +261,9 @@ stream_handle_t create_stream(struct listener *data, int server)
     int currentstacksize = lua_gettop(data->L);
     lua_pop(data->L, currentstacksize - stacksize);
 
-    int listener_type = LISTENER_TYPE_UNKNOWN;
     if (os_stricmp(type,"cleartext") == 0)
     {
     	// Cleartext
-    	listener_type = LISTENER_TYPE_CLEARTEXT;
-
     	stream = stream_new_cleartext();
     	if (stream == NULL)
     	{
@@ -279,8 +276,6 @@ stream_handle_t create_stream(struct listener *data, int server)
     else if (os_stricmp(type,"ciphertext") == 0)
     {
     	// Ciphertext
-    	listener_type = LISTENER_TYPE_CIPHERTEXT;
-
     	if (server)
     	{
     		stream = stream_new_ssl_server();
