@@ -1,0 +1,4 @@
+#cmakedefine HAVE_STRICMP 1
+#cmakedefine HAVE__STRICMP 1
+#cmakedefine HAVE_STRCASECMP 1
+
