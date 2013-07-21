@@ -12,7 +12,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DI
 SET(LuaMakeArg "")
 SET(PlatformExtraLibs "")
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-   SET(LuaMakeArg "darwin")
+   SET(LuaMakeArg "macosx")
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    SET(LuaMakeArg "linux")
