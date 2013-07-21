@@ -62,4 +62,16 @@ add_dependencies(nettles libevent-2.0.21 lua-5.2.2 polarssl-1.2.8)
 target_link_libraries(nettles ${libeventLibs} ${luaLibs} ${polarsslLibs}
 ${PlatformExtraLibs})
 
+set(CPACK_PACKAGE_NAME "nettles")
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 2)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Mathias Olsson")
+
+install(TARGETS nettles RUNTIME DESTINATION ${CPACK_PACKAGE_NAME}/bin)
+install(FILES examples/client-nettles.lua examples/server-nettles.lua DESTINATION /etc/${CPACK_PACKAGE_NAME})
+
+include(CPack)
 
