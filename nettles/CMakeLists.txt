@@ -20,6 +20,7 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
    SET(LuaMakeArg "mingw")
+   SET(PlatformExtraLibs ws2_32)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 ExternalProject_Add(
