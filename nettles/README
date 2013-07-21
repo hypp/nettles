@@ -24,11 +24,18 @@ Currently builds on:
 Git is required to check out the source
 http://git-scm.com/
 
+Nettles is built using CMake or SCons.
+CMake is recommended and SCons is deprecated.
+
+Nettles is built using CMake (version 2.8 or higher)
+http://www.cmake.org/
+
 Nettles is built using SCons
 http://www.scons.org/
 
 SCons requires Python
 http://www.scons.org/wiki/FrequentlyAskedQuestions#What_version_of_Python_do_I_need.3F
+http://www.python.org/
 
 On Windows both MSYS and MinGW is required
 http://www.mingw.org/
@@ -38,23 +45,31 @@ On Linux readline-devel is required
 On RHEL: sudo yum install readline-devel
 On Ubuntu: sudo apt-get install gcc git scons make libreadline-dev
 
-Building on OS X:
-Start a terminal
-git clone https://code.google.com/p/nettles/
-cd nettles/nettles
-/path/to/scons
-
-Building on Windows:
+Building on Windows with SCons:
 Start a command prompt
 git clone https://code.google.com/p/nettles/
 cd nettles/nettles
 /path/to/scons.bat path_to_msys=/path/to/msys/bin
 
-Building on Red Hat Enterprise Linux or Ubuntu:
+Building on Windows with CMake
+Start a MSYS shell
+git clone https://code.google.com/p/nettles/
+cd nettles/nettles
+cmake .
+make
+
+Building on OS X, Red Hat Enterprise Linux or Ubuntu with SCons:
 Start a terminal
 git clone https://code.google.com/p/nettles/
 cd nettles/nettles
 /path/to/scons
+
+Building on OS X, Red Hat Enterprise Linux or Ubuntu with CMake
+Start a terminal
+git clone https://code.google.com/p/nettles/
+cd nettles/nettles
+cmake .
+make
 
 Running
 ========================
